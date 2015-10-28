@@ -1,0 +1,135 @@
+<?xml version="1.0"?>
+
+<launch>
+
+   <arg name="sensor_range" default="2.0"/>
+   <arg name="use_sim_time" default="false" />
+   <param name="/use_sim_time" value="$(arg use_sim_time)"/>
+   <arg name="show_rviz" default="true" />
+
+  <arg name="map_size" default="202"/>
+
+  <arg name="bringup_robulab" default="true"/>
+  <include file="$(find robulab)/launch/bringup.launch" if="$(arg bringup_robulab)"/>  
+  
+  <include file="$(find robulab)/launch/gmapping.launch">
+    <arg name="bringup_robulab" value="false"/>  
+    <arg name="show_rviz" value="false"/>  
+
+  </include>  
+
+  <node pkg="rviz" type="rviz" name="rviz" args="-d $(find robulab)/rviz_cfg/exploration.rviz" if="$(arg show_rviz)"/>
+
+  <!--node pkg="move_base" type="move_base" respawn="true" name="move_base" >
+    <remap from="base_scan" to="scan"/>
+    <remap from="cmd_vel" to="command_velocity"/>
+    
+    
+    <rosparam file="$(find robulab)/yaml/costmap_common_robulab.yaml" command="load" ns="global_costmap"/> 
+    <rosparam file="$(find robulab)/yaml/global_costmap.yaml" command="load" />  
+
+    <rosparam file="$(find robulab)/yaml/costmap_common_robulab.yaml" command="load" ns="local_costmap"/> 
+    <rosparam file="$(find robulab)/yaml/local_costmap.yaml" command="load" />
+    <rosparam file="$(find robulab)/yaml/trajectory_planner_robulab.yaml" command="load"/>
+  </node-->
+  <node pkg="move_base" type="move_base" respawn="true" name="move_base" >
+    <remap from="base_scan" to="scan"/>
+    <remap from="cmd_vel" to="mobile_base/commands/velocity"/>
+    <remap from="odom" to="/odo"/>
+    
+    <rosparam file="$(find turtlebot_tf)/yaml/costmap_common_turtbot.yaml" command="load" ns="global_costmap"/> 
+    <rosparam file="$(find turtlebot_tf)/yaml/global_costmap.yaml" command="load" />  
+
+    <rosparam file="$(find turtlebot_tf)/yaml/costmap_common_turtbot.yaml" command="load" ns="local_costmap"/> 
+    <rosparam file="$(find turtlebot_tf)/yaml/local_costmap.yaml" command="load" />
+    <rosparam file="$(find turtlebot_tf)/yaml/trajectory_planner_turtbot.yaml" command="load"/>
+  </node>
+
+    <node pkg="pose_path_publisher" type="pose_path_publisher" name="pose_path_publisher" output="screen">
+  	<!-- the frame where the robot pose and path will be exprese: ONLY odom or map -->
+        <param name="target_frame_name" value="map" />
+        <!-- the output topics names, puting an empty name ("") mean topic will not be published (DO NOT EMPTY BOTH PLZ.!)-->
+        <param name="pose_topic_name" value="posegmapping" />
+        <param name="path_topic_name" value="" />
+        <param name="publish_frequency_" value="10.0" />
+  </node>
+  <!--node pkg="simple_exploration" type="simple_exploration" name="simple_exploration" >
+  </node-->
+
+  <!--used to compute frontiers by   rosrun phrontier_exploration headless phrontier_explorationpackage_extract_frontiers -->
+  <node pkg="costmap_2d" type="costmap_2d_node" name="costmap_for_exploration_global">
+    
+    <rosparam ns="costmap" subst_value="true">
+      global_frame: /map
+      robot_base_frame: base_link
+      update_frequency: 0.2
+      publish_frequency: 0.2
+      rolling_window: false
+      always_send_full_costmap: true
+
+      # Map management parameters
+      unknown_cost_value: 255
+      
+      robot_radius: 0.30
+      plugins: 
+        - {name: static, type: "costmap_2d::StaticLayer"}
+        - {name: inflation,        type: "costmap_2d::InflationLayer"}  
+      static:
+        #Can pull data from gmapping, map_server or a non-rolling costmap            
+        map_topic: /map
+        subscribe_to_updates: true 
+      inflation:
+        inflation_radius: 0.30
+
+    </rosparam>
+  </node>
+  
+  <node pkg="phrontier_exploration" type="headless" name="exploration_global" args="phrontier_explorationpackage_extract_frontiers_bis">
+    <param name="map_topic" value="/costmap_for_exploration_global/costmap/costmap"/>
+    <param name="frontier_topic" value="phrontier_global"/>
+  </node>
+  
+  <!--node pkg="costmap_2d" type="costmap_2d_node" name="costmap_for_exploration_local">
+    
+    <rosparam ns="costmap" subst_value="true">
+      global_frame: /map
+      robot_base_frame: base_link
+      update_frequency: 0.3
+      publish_frequency: 1.0
+      static_map: false
+      rolling_window: true
+      width: 6.0
+      height: 6.0
+      origin_x: 0.0
+      origin_y: 0.0
+
+      always_send_full_costmap: true
+
+      # Map management parameters
+      unknown_cost_value: 255
+      
+      robot_radius: 0.30
+      plugins: 
+        - {name: static, type: "costmap_2d::StaticLayer"}
+        - {name: inflation,        type: "costmap_2d::InflationLayer"}  
+      static:
+        #Can pull data from gmapping, map_server or a non-rolling costmap            
+        map_topic: /map
+        subscribe_to_updates: true 
+      inflation:
+        inflation_radius: 0.30
+
+    </rosparam>
+  </node-->
+
+  <node pkg="phrontier_exploration" type="headless" name="exploration_local" args="phrontier_explorationpackage_extract_frontiers_accessibles" >
+    <param name="map_topic" value="/costmap_for_exploration_local/costmap/costmap"/>
+    <param name="frontier_topic" value="phrontier_local"/>
+  </node>
+  
+
+
+
+</launch>
+  
+  

@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!--[ Khelifa Baizid, Jul 2015 ]-->
+
+<launch>
+  
+  <node pkg="pose_path_publisher" type="pose_path_publisher" name="pose_path_publisher" output="screen">
+  	<!-- the frame where the robot pose and path will be exprese: ONLY odom or map -->
+        <param name="target_frame_name" value="odom" />
+        <!-- the output topics names, puting an empty name ("") mean topic will not be published (DON NOT EMPTY BOTH PLZ.!)-->
+        <param name="pose_topic_name" value="pose" />
+        <param name="path_topic_name" value="path" />
+  </node>
+
+  <!--node pkg="rviz" type="rviz" name="rviz" output="screen"/-->   
+</launch>
+
+
