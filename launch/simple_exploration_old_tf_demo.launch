@@ -3,7 +3,7 @@
 <launch>
     <include file="$(find kobuki_node)/launch/minimal.launch" />
  
-  <node pkg="turtlebot_tf" type="turtlebot_tf_node">
+  <node pkg="turtlebot_tf" type="turtlebot_tf_node" name="turtlebot_tf_node" >
   </node>
 
   <node pkg="hokuyo_node" type="hokuyo_node" name="hokuyo_node" >
