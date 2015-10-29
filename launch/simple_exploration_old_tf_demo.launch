@@ -1,6 +1,20 @@
 <?xml version="1.0"?>
 
 <launch>
+    <include file="$(find kobuki_node)/launch/minimal.launch" />
+ 
+  <node pkg="turtlebot_tf" type="turtlebot_tf_node">
+  </node>
+
+  <node pkg="hokuyo_node" type="hokuyo_node" name="hokuyo_node" >
+    <param name="min_ang" value="-1.9"/>
+    <param name="max_ang" value="1.9"/>
+  </node>
+
+  <node pkg="tf" type="static_transform_publisher" name="link1_broadcaster" args="0.110 0 0.02478 0 0 0 1 base_link laser 50" />
+  
+  <include file="$(find turtlebot_tf)/launch/gmapping.launch" />
+  <include file="$(find turtlebot_tf)/launch/move_base.launch" />
 
   <node pkg="pose_path_publisher" type="pose_path_publisher" name="pose_path_publisher" output="screen">
   	<!-- the frame where the robot pose and path will be exprese: ONLY odom or map -->
