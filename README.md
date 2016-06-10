@@ -4,7 +4,9 @@ This is a ROS catkin package that contains specific launch files (and other reso
 
 ##Prerequisites / Installation
 
-catkin package turtlebot_car
+2 catkin packages (available on github/CARMinesDouai): 
+- turtlebot_car
+- pose_path_publisher
 
 ##How to use
 
