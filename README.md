@@ -7,7 +7,9 @@ This is a ROS catkin package that contains specific launch files (and other reso
 2 catkin packages (available on github/CARMinesDouai): 
 - turtlebot_car
 - pose_path_publisher
-- PhrontierExploration *PhaROS* package [PhaROS install notes](http://car.mines-douai.fr/2014/06/how-to-install-pharos/)
+
+1 *PhaROS* package [PhaROS install notes](http://car.mines-douai.fr/2014/06/how-to-install-pharos/)
+- PhrontierExploration 
 	
 	```bash
 	pharos create phrontier_exploration
