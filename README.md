@@ -7,7 +7,13 @@ This is a ROS catkin package that contains specific launch files (and other reso
 2 catkin packages (available on github/CARMinesDouai): 
 - turtlebot_car
 - pose_path_publisher
-
+- PhrontierExploration *PhaROS* package
+	
+	```bash
+	pharos create phrontier_exploration
+	rosrun edit phrontier_exploration
+	# then load this package: http://smalltalkhub.com/#!/~CAR/PhrontierExploration
+	```
 ##How to use
 
 ### Autonomous exploration with Turtlebot
