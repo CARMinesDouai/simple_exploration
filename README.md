@@ -25,7 +25,6 @@ This is a ROS catkin package that contains specific launch files (and other reso
 	# which publishes accessible frontiers to be explored 
 	roslaunch simple_exploration simple_exploration_minimal.launch
 	
-	# this will send frontiers as goals to move_base
-	rosrun simple_exploration simple_exploration
-
+	roslaunch simple_exploration simple_exploration_turtlebot.launch
+	
 
